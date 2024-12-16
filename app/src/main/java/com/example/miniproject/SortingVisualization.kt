@@ -268,7 +268,7 @@ suspend fun selectionSort(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortingVisualizer1(navController: NavController) {
+fun BubbleSort(navController: NavController) {
     var inputText by remember { mutableStateOf("") }
     var numbers by remember { mutableStateOf(listOf<Int>()) }
     var isSorting by remember { mutableStateOf(false) }
@@ -308,14 +308,14 @@ fun SortingVisualizer1(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier=Modifier.height(50.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Row() {
                 TextField(
                     value = inputText,
                     onValueChange = { inputText = it },
-                    label = { Text("Enter numbers separated by commas") },
+                    label = { Text("Enter numbers") },
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.7f)
                         .height(56.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -327,9 +327,10 @@ fun SortingVisualizer1(navController: NavController) {
                     },
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
-                    Text("Set Numbers")
+                    Text("Set")
                 }
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -510,7 +511,7 @@ suspend fun bubbleSort(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortingVisualizer2(navController: NavController) {
+fun InsertionSort(navController: NavController) {
     var inputText by remember { mutableStateOf("") }
     var numbers by remember { mutableStateOf(listOf<Int>()) }
     var isSorting by remember { mutableStateOf(false) }
@@ -553,14 +554,14 @@ fun SortingVisualizer2(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier=Modifier.height(50.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Row() {
                 TextField(
                     value = inputText,
                     onValueChange = { inputText = it },
-                    label = { Text("Enter numbers separated by commas") },
+                    label = { Text("Enter numbers") },
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.7f)
                         .height(56.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -572,9 +573,10 @@ fun SortingVisualizer2(navController: NavController) {
                     },
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
-                    Text("Set Numbers")
+                    Text("Set")
                 }
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -726,7 +728,7 @@ suspend fun insertionSort(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortingVisualizer3(navController: NavController) {
+fun SelectionSort(navController: NavController) {
     var inputText by remember { mutableStateOf("") }
     var numbers by remember { mutableStateOf(listOf<Int>()) }
     var isSorting by remember { mutableStateOf(false) }
@@ -766,14 +768,14 @@ fun SortingVisualizer3(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier=Modifier.height(50.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Row() {
                 TextField(
                     value = inputText,
                     onValueChange = { inputText = it },
-                    label = { Text("Enter numbers separated by commas") },
+                    label = { Text("Enter numbers") },
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.7f)
                         .height(56.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -785,7 +787,7 @@ fun SortingVisualizer3(navController: NavController) {
                     },
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
-                    Text("Set Numbers")
+                    Text("Set")
                 }
             }
 

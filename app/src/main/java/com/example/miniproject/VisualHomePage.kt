@@ -36,7 +36,7 @@ fun VisualHomePage(navController: NavController) {
     LaunchedEffect(verticalScrollState.value) {
         isIconVisible = verticalScrollState.value == 0
     }
-
+    val scrollingState0 = rememberScrollState()
     val scrollingState1 = rememberScrollState()
     val scrollingState2 = rememberScrollState()
     val scrollingState3 = rememberScrollState()
@@ -77,6 +77,94 @@ fun VisualHomePage(navController: NavController) {
                 .verticalScroll(verticalScrollState)
                 .padding(top = 60.dp)
         ) {
+            Text("Data Structures", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+            Row(modifier = Modifier.horizontalScroll(scrollingState0).padding(top = 5.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Array",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Array")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Stack",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    Button(onClick = {navController.navigate("Stack")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Queue",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Queue")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Linked List",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Linked_list")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Hash Table",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Hash_table")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
+                    }
+                }
+
+            }
+
+            Spacer(modifier = Modifier.height(15.dp))
+
             Text("Sorting Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
             Row(modifier = Modifier.horizontalScroll(scrollingState1).padding(top = 5.dp)) {
 
@@ -135,16 +223,55 @@ fun VisualHomePage(navController: NavController) {
 
             Text("Searching Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
             Row(modifier = Modifier.horizontalScroll(scrollingState2).padding(top = 5.dp)) {
-                repeat(5) {
-                    Box(
-                        modifier = Modifier
-                            .size(boxWidth)
-                            .padding(4.dp) // Added padding between boxes
-                            .background(Color.Gray)
-                    ) {
-                        Text("Box ${it + 1}", modifier = Modifier.align(Alignment.Center))
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Linear",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    Button(onClick = {navController.navigate("LinearSearch")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
                     }
                 }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.Gray)
+                ) {
+                    Text(
+                        text = "Binary",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("BinarySearch")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                        Text("Start")
+                    }
+                }
+//                Box(
+//                    modifier = Modifier
+//                        .size(boxWidth)
+//                        .padding(4.dp)
+//                        .background(Color.Gray)
+//                ) {
+//                    Text(
+//                        text = "Selection Sort",
+//                        color = Color.White,
+//                        style = MaterialTheme.typography.titleLarge,
+//                        modifier = Modifier.align(Alignment.Center)
+//                    )
+//                    Button(onClick = {navController.navigate("SelectionSort")}, modifier = Modifier.align(Alignment.BottomCenter)){
+//                        Text("Start")
+//                    }
+//                }
             }
 
             Spacer(modifier = Modifier.height(15.dp))

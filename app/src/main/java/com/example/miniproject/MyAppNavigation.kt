@@ -32,13 +32,34 @@ fun MyAppNavigation(modifier: Modifier =Modifier,authViewModel: AuthViewModel){
             AimlModel2(navController)
         }
         composable("BubbleSort"){
-            SortingVisualizer1(navController)
+            BubbleSort(navController)
         }
         composable("InsertionSort"){
-            SortingVisualizer2(navController)
+            InsertionSort(navController)
         }
         composable("SelectionSort"){
-            SortingVisualizer3(navController)
+            SelectionSort(navController)
+        }
+        composable("LinearSearch"){
+            LinearSearchVisualizer(navController)
+        }
+        composable("BinarySearch"){
+            BinarySearchVisualizer(navController)
+        }
+        composable("Stack"){
+            StackVisualizer(navController)
+        }
+        composable("Queue"){
+            QueueVisualizer(navController)
+        }
+        composable("Linked_list"){
+            LinkedListVisualizer(navController)
+        }
+        composable("Hash_table"){
+            HashingVisualizer(navController)
+        }
+        composable("Array"){
+            ArrayVisualizer(navController)
         }
     })
 }

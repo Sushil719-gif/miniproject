@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -32,12 +34,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,14 +52,19 @@ import androidx.navigation.NavController
 import com.example.miniproject.AuthState
 import com.example.miniproject.AuthViewModel
 
-
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+fun LoginPage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    authViewModel: AuthViewModel
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
@@ -82,7 +94,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Logo Placeholder (can replace with an Image)
+            // Logo Placeholder
             Box(
                 modifier = Modifier
                     .size(80.dp)
@@ -103,7 +115,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Input Fields
+            // Email Input
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -118,11 +130,17 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                     focusedBorderColor = Color.White,
                     unfocusedBorderColor = Color.White.copy(alpha = 0.7F),
                     cursorColor = Color.White
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Password Input
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -138,11 +156,20 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                     unfocusedBorderColor = Color.White.copy(alpha = 0.7F),
                     cursorColor = Color.White
                 ),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        authViewModel.login(email, password)
+                    }
+                )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Sign In Button
             Button(
                 onClick = { authViewModel.login(email, password) },
                 modifier = Modifier
@@ -155,6 +182,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Forgot Password Button
             TextButton(onClick = { /* Handle Forgot Password */ }) {
                 Text(
                     "Forget password?",
@@ -165,6 +193,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Sign Up Button
             TextButton(onClick = { navController.navigate("signup") }) {
                 Text(
                     text = "Don’t have an account? Create new.",
