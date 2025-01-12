@@ -2,6 +2,7 @@ package com.example.miniproject
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -283,6 +285,12 @@ fun BubbleSort(navController: NavController) {
 
     val lazyListState = rememberLazyListState() // Remember the state of LazyRow
     val scrollState = rememberScrollState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -304,6 +312,7 @@ fun BubbleSort(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .clickable{dismissKeyboard()}
                 .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -321,6 +330,7 @@ fun BubbleSort(navController: NavController) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         numbers = inputText.split(",")
                             .mapNotNull { it.trim().toIntOrNull() }
                             .toMutableList()
@@ -526,6 +536,12 @@ fun InsertionSort(navController: NavController) {
 
     val lazyListState = rememberLazyListState()
     val scrollState = rememberScrollState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -550,6 +566,7 @@ fun InsertionSort(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .clickable{dismissKeyboard()}
                 .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -567,6 +584,7 @@ fun InsertionSort(navController: NavController) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         numbers = inputText.split(",")
                             .mapNotNull { it.trim().toIntOrNull() }
                             .toMutableList()
@@ -700,28 +718,33 @@ suspend fun insertionSort(
 ) {
     val n = array.size
 
+    // Loop through the list starting from the second element
     for (i in 1 until n) {
-        val key = array[i]
-        var j = i - 1
+        val key = array[i]  // The current element to be inserted in the sorted part of the list
+        var j = i - 1  // The index for comparing elements to the left of 'key'
 
-        // Move elements that are greater (or smaller, for descending) than key
+        // Compare 'key' with elements to its left (depending on ascending/descending order)
         while (j >= 0 && (if (sortAscending) array[j] > key else array[j] < key)) {
-            array[j + 1] = array[j]
-            j -= 1
+            // Message: Explain the comparison and the movement of elements
+            onUpdate(array, listOf(j + 1, j), listOf((j + 1).toFloat(), j.toFloat()),
+                "Comparing $key with ${array[j]}. Since ${array[j]} is ${if (sortAscending) "greater" else "smaller"} than $key, moving ${array[j]} to the right.")
 
-            // Update the visualization with the comparison step
-            onUpdate(array, listOf(j + 1, j), listOf((j + 1).toFloat(), j.toFloat()), "Moving ${array[j + 1]} to position ${j + 2}")
-            delay(delayTime)
+            // Move the larger (or smaller) element to the right to make space for 'key'
+            array[j + 1] = array[j]
+            j -= 1  // Move left to the next element
+            delay(delayTime)  // Delay for animation or visualization
         }
+
+        // Insert the key into its correct position
         array[j + 1] = key
 
-        // Update the visualization after the insertion
-        onUpdate(array, emptyList(), emptyList(), "Inserting $key at position ${j + 1}")
-        delay(delayTime)
+        // Message: Explain where the key is inserted and why it's placed there (sorted part of the list)
+        onUpdate(array, emptyList(), emptyList(), "Inserting $key at position ${j + 1} because it's the correct spot to maintain order.")
+        delay(delayTime)  // Delay for animation or visualization
     }
 
-    // Final message indicating sorting is complete
-    onUpdate(array, emptyList(), emptyList(), "Sorting complete!")
+    // Final message when the sorting is complete
+    onUpdate(array, emptyList(), emptyList(), "Sorting complete! The list is now in ${if (sortAscending) "ascending" else "descending"} order.")
 }
 
 // Selection Sort
@@ -743,6 +766,12 @@ fun SelectionSort(navController: NavController) {
 
     val lazyListState = rememberLazyListState() // Remember the state of LazyRow
     val scrollState = rememberScrollState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -764,6 +793,7 @@ fun SelectionSort(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .clickable{dismissKeyboard()}
                 .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -781,6 +811,7 @@ fun SelectionSort(navController: NavController) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         numbers = inputText.split(",")
                             .mapNotNull { it.trim().toIntOrNull() }
                             .toMutableList()

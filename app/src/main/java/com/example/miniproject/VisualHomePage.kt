@@ -83,7 +83,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Array",
@@ -91,7 +91,14 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("Array")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(
+                        onClick = { navController.navigate("Array") },
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)// Add some padding at the bottom
+                    ) {
                         Text("Start")
                     }
                 }
@@ -99,7 +106,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Stack",
@@ -108,7 +115,11 @@ fun VisualHomePage(navController: NavController) {
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    Button(onClick = {navController.navigate("Stack")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("Stack")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -116,7 +127,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Queue",
@@ -124,7 +135,11 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("Queue")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("Queue")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -132,7 +147,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Linked List",
@@ -140,7 +155,11 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("Linked_list")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("Linked_list")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -148,7 +167,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Hash Table",
@@ -156,10 +175,33 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("Hash_table")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("Hash_table")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "BST",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("BST")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }}
 
             }
 
@@ -172,7 +214,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Bubble Sort",
@@ -181,7 +223,11 @@ fun VisualHomePage(navController: NavController) {
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    Button(onClick = {navController.navigate("BubbleSort")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("BubbleSort")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -189,7 +235,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Insertion Sort",
@@ -197,7 +243,11 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("InsertionSort")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("InsertionSort")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -205,7 +255,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Selection Sort",
@@ -213,7 +263,11 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("SelectionSort")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("SelectionSort")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -227,7 +281,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Linear",
@@ -236,7 +290,11 @@ fun VisualHomePage(navController: NavController) {
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    Button(onClick = {navController.navigate("LinearSearch")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("LinearSearch")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
@@ -244,7 +302,7 @@ fun VisualHomePage(navController: NavController) {
                     modifier = Modifier
                         .size(boxWidth)
                         .padding(4.dp)
-                        .background(Color.Gray)
+                        .background(Color.DarkGray)
                 ) {
                     Text(
                         text = "Binary",
@@ -252,40 +310,32 @@ fun VisualHomePage(navController: NavController) {
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = {navController.navigate("BinarySearch")}, modifier = Modifier.align(Alignment.BottomCenter)){
+                    Button(onClick = {navController.navigate("BinarySearch")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
                         Text("Start")
                     }
                 }
-//                Box(
-//                    modifier = Modifier
-//                        .size(boxWidth)
-//                        .padding(4.dp)
-//                        .background(Color.Gray)
-//                ) {
-//                    Text(
-//                        text = "Selection Sort",
-//                        color = Color.White,
-//                        style = MaterialTheme.typography.titleLarge,
-//                        modifier = Modifier.align(Alignment.Center)
-//                    )
-//                    Button(onClick = {navController.navigate("SelectionSort")}, modifier = Modifier.align(Alignment.BottomCenter)){
-//                        Text("Start")
-//                    }
-//                }
-            }
-
-            Spacer(modifier = Modifier.height(15.dp))
-
-            Text("Graph Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            Row(modifier = Modifier.horizontalScroll(scrollingState3).padding(top = 5.dp)) {
-                repeat(5) {
-                    Box(
-                        modifier = Modifier
-                            .size(boxWidth)
-                            .padding(4.dp) // Added padding between boxes
-                            .background(Color.Gray)
-                    ) {
-                        Text("Box ${it + 1}", modifier = Modifier.align(Alignment.Center))
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Interpolation Sort",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("IPS")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                        .wrapContentSize()
+                        .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                        .padding(bottom = 4.dp)){
+                        Text("Start")
                     }
                 }
             }
@@ -293,49 +343,270 @@ fun VisualHomePage(navController: NavController) {
             Spacer(modifier = Modifier.height(15.dp))
 
             Text("Graph Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            Row(modifier = Modifier.horizontalScroll(scrollingState4).padding(top = 5.dp)) {
-                repeat(5) {
-                    Box(
-                        modifier = Modifier
-                            .size(boxWidth)
-                            .padding(4.dp) // Added padding between boxes
-                            .background(Color.Gray)
-                    ) {
-                        Text("Box ${it + 1}", modifier = Modifier.align(Alignment.Center))
+            Row(modifier = Modifier.horizontalScroll(scrollingState2).padding(top = 5.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "DFS",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    Button(onClick = {navController.navigate("DFS")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "BFS",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("BFS")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Topological Sort",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("TopoSort")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            Text("Machine Learning Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            Row(modifier = Modifier.horizontalScroll(scrollingState5).padding(top = 5.dp)) {
-                repeat(5) {
-                    Box(
-                        modifier = Modifier
-                            .size(boxWidth)
-                            .padding(4.dp) // Added padding between boxes
-                            .background(Color.Gray)
-                    ) {
-                        Text("Box ${it + 1}", modifier = Modifier.align(Alignment.Center))
+            Text("Greedy Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+            Row(modifier = Modifier.horizontalScroll(scrollingState2).padding(top = 5.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Prim's",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    Button(onClick = {navController.navigate("prims")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Kruskal's",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Kruskal")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Dijkstra's",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Dijkstra")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            Text("Other Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            Row(modifier = Modifier.horizontalScroll(scrollingState6).padding(top = 5.dp)) {
-                repeat(5) {
-                    Box(
-                        modifier = Modifier
-                            .size(boxWidth)
-                            .padding(4.dp) // Added padding between boxes
-                            .background(Color.Gray)
-                    ) {
-                        Text("Box ${it + 1}", modifier = Modifier.align(Alignment.Center))
+            Text("AI&ML Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+            Row(modifier = Modifier.horizontalScroll(scrollingState2).padding(top = 5.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "GBFS",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    Button(onClick = {navController.navigate("Gbfs")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
                     }
                 }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "UCS",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Ucs")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Astar",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Astar")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "IDAstar",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Idastar")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            Text("Transform-and-Conquer Design Technique", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+            Row(modifier = Modifier.horizontalScroll(scrollingState2).padding(top = 5.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "AVL-Tree",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    Button(onClick = {navController.navigate("avl")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "heap",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("Heap")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+
             }
         }
     }

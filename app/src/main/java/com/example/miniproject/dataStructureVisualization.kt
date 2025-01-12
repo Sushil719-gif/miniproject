@@ -22,6 +22,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -29,9 +31,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 
@@ -47,6 +53,12 @@ fun ArrayVisualizer(navController: NavController) {
     var updateValue by rememberSaveable { mutableStateOf("") }
     var deleteIndex by rememberSaveable { mutableStateOf("") }
     var message by rememberSaveable { mutableStateOf("Perform array operations!") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
 
     val arrayData = remember { mutableStateListOf<Int?>() }
     val focusManager = LocalFocusManager.current // Manager to dismiss the keyboard
@@ -77,7 +89,7 @@ fun ArrayVisualizer(navController: NavController) {
             contentDescription = "Back"
         )
     }
-        Column(
+        Column(modifier=Modifier.clickable{dismissKeyboard()},
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -164,6 +176,7 @@ fun ArrayVisualizer(navController: NavController) {
                 )
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         val value = inputValue.toIntOrNull()
                         if (value != null) {
                             val emptyIndex = arrayData.indexOfFirst { it == null }
@@ -206,6 +219,7 @@ fun ArrayVisualizer(navController: NavController) {
                 )
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         val index = updateIndex.toIntOrNull()
                         val value = updateValue.toIntOrNull()
                         if (index != null && value != null && index in arrayData.indices) {
@@ -238,6 +252,7 @@ fun ArrayVisualizer(navController: NavController) {
                 )
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         val index = deleteIndex.toIntOrNull()
                         if (index != null && index in arrayData.indices) {
                             arrayData[index] = null
@@ -283,6 +298,12 @@ fun StackVisualizer(navController: NavController) {
     var isPushing by remember { mutableStateOf(false) }
     var pushedElement by remember { mutableStateOf<Int?>(null) }
     var isPeeking by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -310,7 +331,8 @@ fun StackVisualizer(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .clickable{dismissKeyboard()},
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -407,6 +429,7 @@ fun StackVisualizer(navController: NavController) {
 
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         val value = inputValue.toIntOrNull()
                         if (value != null) {
                             isPushing = true
@@ -432,6 +455,7 @@ fun StackVisualizer(navController: NavController) {
             ) {
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         if (stack.isNotEmpty()) {
                             val poppedValue = stack.last()
                             poppedElement = poppedValue
@@ -448,6 +472,7 @@ fun StackVisualizer(navController: NavController) {
 
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         if (stack.isNotEmpty()) {
                             isPeeking = true
                             message = "Peeked at top value: ${stack.last()}"
@@ -504,6 +529,12 @@ fun QueueVisualizer(navController: NavController) {
     var inputValue by remember { mutableStateOf("") }
     var dequeuedElement by remember { mutableStateOf<Int?>(null) }
     var isDequeuing by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
 
     val listState = rememberLazyListState() // State for LazyRow scrolling
     val coroutineScope = rememberCoroutineScope() // Coroutine scope for animations
@@ -531,7 +562,8 @@ fun QueueVisualizer(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .clickable{dismissKeyboard()},
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -629,6 +661,7 @@ fun QueueVisualizer(navController: NavController) {
 
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         val value = inputValue.toIntOrNull()
                         if (value != null) {
                             queue = queue + value
@@ -657,6 +690,7 @@ fun QueueVisualizer(navController: NavController) {
             ) {
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         if (queue.isNotEmpty()) {
                             val dequeuedValue = queue.first()
                             dequeuedElement = dequeuedValue
@@ -711,6 +745,12 @@ fun LinkedListVisualizer(navController: NavController) {
 
     val listState = rememberLazyListState() // State for horizontal scrolling
     val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
 
     val configuration = LocalConfiguration.current
     val isLandscape =
@@ -739,7 +779,8 @@ fun LinkedListVisualizer(navController: NavController) {
         }
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize() // Use full screen
+                .fillMaxSize()
+                .clickable{dismissKeyboard()}// Use full screen
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -882,6 +923,7 @@ fun LinkedListVisualizer(navController: NavController) {
 
                     Button(
                         onClick = {
+                            dismissKeyboard()
                             val value = inputValue.toIntOrNull()
                             if (value != null) {
                                 linkedList = linkedList + (value to null)
@@ -1133,6 +1175,12 @@ fun HashingVisualizer(navController: NavController) {
     var message by rememberSaveable { mutableStateOf("Perform hashing operations!") }
     val listState = rememberLazyListState()
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
 
     // Call the side effect function
     HashingSideEffects(tableSize, hashTable, listState)
@@ -1161,7 +1209,7 @@ fun HashingVisualizer(navController: NavController) {
                 contentDescription = "Back"
             )
         }
-        Column(
+        Column(modifier=Modifier.clickable{dismissKeyboard()},
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -1249,6 +1297,7 @@ fun HashingVisualizer(navController: NavController) {
 
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         focusManager.clearFocus() // Dismiss keyboard
                         val key = inputValue.toIntOrNull()
                         if (key != null) {
@@ -1299,6 +1348,7 @@ fun HashingVisualizer(navController: NavController) {
 
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         focusManager.clearFocus() // Dismiss keyboard
                         val key = searchValue.toIntOrNull()
                         if (key != null) {
@@ -1349,6 +1399,7 @@ fun HashingVisualizer(navController: NavController) {
 
                 Button(
                     onClick = {
+                        dismissKeyboard()
                         focusManager.clearFocus() // Dismiss keyboard
                         val key = deleteValue.toIntOrNull()
                         if (key != null) {
@@ -1416,4 +1467,532 @@ fun HashingSideEffects(
     }
 }
 
+//Binary Search Tree
+data class TreeNode(
+    var value: Int,
+    var left: TreeNode? = null,
+    var right: TreeNode? = null,
+    var parent: TreeNode? = null
+)
 
+@Composable
+fun BinarySearchTreeVisualizer(navController: NavController) {
+    var tree by remember { mutableStateOf<TreeNode?>(null) }
+    var inputValue by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("Welcome! Enter the root node to start.") }
+    var traversalResult by remember { mutableStateOf("") }
+    var highlightedNode by remember { mutableStateOf<TreeNode?>(null) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
+    val coroutineScope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        // Only show the IconButton if isIconVisible is true
+
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.TopStart)
+                .zIndex(1f)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back"
+            )
+        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .clickable{dismissKeyboard()},
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier=Modifier.height(50.dp))
+        Text(
+            text = "BST Visualization",
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            color = Color.Black
+        )
+
+        // Tree Visualization
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color(0xFFE3F2FD), RoundedCornerShape(8.dp))
+                .padding(16.dp)
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                if (tree != null) {
+                    drawTree(tree!!, size.width / 2, 50f, 0, size.width / 2, 50f, highlightedNode, tree)
+                }
+            }
+        }
+
+        // Message display
+        Text(
+            text = message,
+            fontSize = 18.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        // Input field and Add Node button
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OutlinedTextField(
+                value = inputValue,
+                onValueChange = { inputValue = it },
+                label = { Text("Enter Node Value") },
+                singleLine = true,
+                modifier = Modifier.weight(1f)
+            )
+
+            Button(
+                onClick = {
+                    dismissKeyboard()
+                    val value = inputValue.toIntOrNull()
+                    if (value == null) {
+                        message = "Please enter a valid integer value."
+                        return@Button
+                    }
+                    if (tree == null) {
+                        tree = TreeNode(value)
+                        message = "Root node $value added."
+                        highlightedNode = tree
+                    } else {
+                        message = insertNode(tree!!, value)
+                        highlightedNode = searchNode(tree, value)
+                    }
+                    inputValue = ""
+                    keyboardController?.hide()
+                },
+                modifier = Modifier.height(56.dp)
+            ) {
+                Text("Add Node")
+            }
+        }
+
+        // Search and Delete Buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Button(
+                onClick = {
+                    dismissKeyboard()
+                    val value = inputValue.toIntOrNull()
+                    if (value == null) {
+                        message = "Please enter a valid integer value to search."
+                        return@Button
+                    }
+                    searchNode(tree, value)?.let {
+                        highlightedNode = it
+                        message = "Node $value found."
+                    } ?: run {
+                        message = "Node $value not found."
+                    }
+                    inputValue = ""
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Search Node")
+            }
+
+            Button(
+                onClick = {
+                    dismissKeyboard()
+                    val value = inputValue.toIntOrNull()
+                    if (value == null) {
+                        message = "Please enter a valid integer value to delete."
+                        return@Button
+                    }
+
+                    var deletionMessages = mutableListOf<String>() // Collect messages from the deletion process
+                    var isNodeDeleted = false // Track if the node was actually deleted
+
+                    tree = deleteNode(tree, value) { comparisonMessage, deletionOccurred ->
+                        deletionMessages.add(comparisonMessage) // Append messages from `onMessage` callback
+                        if (deletionOccurred) isNodeDeleted = true // Update flag if deletion occurred
+                    }
+
+                    if (isNodeDeleted) {
+                        message = deletionMessages.joinToString("\n") + "\nNode $value deleted."
+                        highlightedNode = null
+                    } else {
+                        message = deletionMessages.joinToString("\n") + "\nNode $value not found for deletion."
+                    }
+
+                    inputValue = ""
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Delete Node")
+            }
+
+
+        }
+
+        // Tree Traversal Buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Button(
+                onClick = {
+                    traversalResult = ""
+                    coroutineScope.launch {
+                        inOrderTraversal(tree) { node ->
+                            highlightedNode = node
+                            traversalResult += "${node.value}, "
+                            message = "Visiting node ${node.value} (In-order)."
+                            delay(500)
+                        }
+                        message = "In-order Traversal: ${traversalResult.trimEnd(',', ' ')}"
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("In-order")
+            }
+
+            Button(
+                onClick = {
+                    traversalResult = ""
+                    coroutineScope.launch {
+                        preOrderTraversal(tree) { node ->
+                            highlightedNode = node
+                            traversalResult += "${node.value}, "
+                            message = "Visiting node ${node.value} (Pre-order)."
+                            delay(500)
+                        }
+                        message = "Pre-order Traversal: ${traversalResult.trimEnd(',', ' ')}"
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Pre-order")
+            }
+
+            Button(
+                onClick = {
+                    traversalResult = ""
+                    coroutineScope.launch {
+                        postOrderTraversal(tree) { node ->
+                            highlightedNode = node
+                            traversalResult += "${node.value}, "
+                            message = "Visiting node ${node.value} (Post-order)."
+                            delay(500)
+                        }
+                        message = "Post-order Traversal: ${traversalResult.trimEnd(',', ' ')}"
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Post-order")
+            }
+        }
+    }
+}}
+
+suspend fun inOrderTraversal(node: TreeNode?, onVisit: suspend (TreeNode) -> Unit) {
+    if (node == null) return
+    inOrderTraversal(node.left, onVisit)
+    onVisit(node)
+    inOrderTraversal(node.right, onVisit)
+}
+
+suspend fun preOrderTraversal(node: TreeNode?, onVisit: suspend (TreeNode) -> Unit) {
+    if (node == null) return
+    onVisit(node)
+    preOrderTraversal(node.left, onVisit)
+    preOrderTraversal(node.right, onVisit)
+}
+
+suspend fun postOrderTraversal(node: TreeNode?, onVisit: suspend (TreeNode) -> Unit) {
+    if (node == null) return
+    postOrderTraversal(node.left, onVisit)
+    postOrderTraversal(node.right, onVisit)
+    onVisit(node)
+}
+
+// Insert, delete, and drawTree functions remain as updated above
+
+fun insertNode(root: TreeNode, value: Int): String {
+    var currentNode: TreeNode? = root
+    var parent: TreeNode? = null
+    val messageBuilder = StringBuilder()
+
+    while (currentNode != null) {
+        parent = currentNode
+        // Log the comparison
+        messageBuilder.append("Comparing $value with ${currentNode.value}. ")
+
+        if (value == currentNode.value) {
+            // Duplicate value, do not allow insertion
+            messageBuilder.append("$value already exists in the tree. No node added.")
+            return messageBuilder.toString()
+        }
+
+        if (value < currentNode.value) {
+            messageBuilder.append("$value < ${currentNode.value}, moving to left child. ")
+            if (currentNode.left == null) break
+            currentNode = currentNode.left
+        } else {
+            messageBuilder.append("$value > ${currentNode.value}, moving to right child. ")
+            if (currentNode.right == null) break
+            currentNode = currentNode.right
+        }
+    }
+
+    // Create and insert the new node
+    val newNode = TreeNode(value, parent = parent)
+    if (value < parent!!.value) {
+        parent.left = newNode
+        messageBuilder.append("$value inserted as the left child of ${parent.value}.")
+    } else {
+        parent.right = newNode
+        messageBuilder.append("$value inserted as the right child of ${parent.value}.")
+    }
+
+    return messageBuilder.toString()
+}
+
+fun deleteNode(
+    root: TreeNode?,
+    value: Int,
+    onMessage: (String, Boolean) -> Unit
+): TreeNode? {
+    if (root == null) {
+        onMessage("Tree is empty or node $value not found.", false)
+        return null
+    }
+
+    var current = root
+    var parent: TreeNode? = null
+    var isLeftChild = false
+
+    // Traverse the tree to find the node
+    while (current != null) {
+        when {
+            value < current.value -> {
+                onMessage("Comparing $value with ${current.value}, $value < ${current.value}, moving to the left.", false)
+                parent = current
+                current = current.left
+                isLeftChild = true
+            }
+            value > current.value -> {
+                onMessage("Comparing $value with ${current.value}, $value > ${current.value}, moving to the right.", false)
+                parent = current
+                current = current.right
+                isLeftChild = false
+            }
+            else -> {
+                onMessage("Node $value found for deletion.", false)
+                break
+            }
+        }
+    }
+
+    if (current == null) {
+        onMessage("Node $value not found in the tree.", false)
+        return root
+    }
+
+    // Case 1: Node has no children
+    if (current.left == null && current.right == null) {
+        if (parent == null) {
+            onMessage("Deleting root node $value with no children.", true)
+            return null // The tree becomes empty
+        }
+
+        if (isLeftChild) {
+            parent.left = null
+        } else {
+            parent.right = null
+        }
+
+        onMessage("Node $value has no children, Deleting.....", true)
+    }
+    // Case 2: Node has one child
+    else if (current.left == null || current.right == null) {
+        val child = current.left ?: current.right
+
+        if (parent == null) {
+            onMessage("Root node $value deleted and replaced by its only child ${child?.value}.", true)
+            child?.parent = null
+            return child
+        }
+
+        if (isLeftChild) {
+            parent.left = child
+        } else {
+            parent.right = child
+        }
+
+        child?.parent = parent
+        onMessage("Node $value deleted and replaced by its only child ${child?.value}.", true)
+    }
+    // Case 3: Node has two children
+    else {
+        // Find the in-order successor (smallest node in the right subtree)
+        var successor = current.right
+        var successorParent = current
+
+        while (successor?.left != null) {
+            successorParent = successor
+            successor = successor.left
+        }
+
+        onMessage("In-order successor of $value is ${successor?.value}.", false)
+
+        // Replace current node's value with the successor's value
+        current.value = successor!!.value
+
+        // Delete the successor node (it will have at most one child)
+        if (successorParent != null) {
+            if (successorParent.left == successor) {
+                successorParent.left = successor.right
+            } else {
+                successorParent.right = successor.right
+            }
+        }
+
+        if (successor.right != null) {
+            successor.right?.parent = successorParent
+        }
+
+        onMessage("Node $value deleted and replaced with its in-order successor ${successor.value}.", true)
+    }
+
+    return root
+}
+
+
+fun searchNode(root: TreeNode?, value: Int): TreeNode? {
+    var currentNode = root
+    while (currentNode != null) {
+        if (value == currentNode.value) {
+            return currentNode
+        }
+        currentNode = if (value < currentNode.value) currentNode.left else currentNode.right
+    }
+    return null
+}
+fun androidx.compose.ui.graphics.drawscope.DrawScope.drawTree(
+    node: TreeNode?,
+    x: Float,
+    y: Float,
+    depth: Int,
+    parentX: Float,
+    parentY: Float,
+    highlightedNode: TreeNode?,
+    root: TreeNode?
+) {
+    // Ensure root is passed and is null to check for an empty tree
+    if (root == null) {
+        // Draw message in the center of the canvas
+        drawIntoCanvas { canvas ->
+            val paint = android.graphics.Paint().apply {
+                textAlign = android.graphics.Paint.Align.CENTER
+                textSize = 50f // Font size for the message
+                color = android.graphics.Color.BLACK
+            }
+            canvas.nativeCanvas.drawText(
+                "The tree is empty!",
+                size.width / 2, // Center horizontally
+                size.height / 2, // Center vertically
+                paint
+            )
+        }
+        return
+    }
+
+    if (node == null) return
+
+    val nodeRadius = 40f
+    val verticalSpacing = 150f
+    val horizontalSpacing = 200f / (depth + 1)
+
+    // Draw line from parent to current node if not the root
+    if (depth > 0) {
+        drawLine(
+            color = Color.Black,
+            start = Offset(parentX, parentY + nodeRadius),
+            end = Offset(x, y - nodeRadius),
+            strokeWidth = 4f
+        )
+    }
+
+    // Draw the node circle
+    drawCircle(
+        color = when {
+            node == highlightedNode -> Color.Green // Highlighted node
+            node == root -> Color.Red             // Root node
+            else -> Color.Cyan                    // Regular node
+        },
+        radius = nodeRadius,
+        center = Offset(x, y)
+    )
+
+    // Draw the node value inside the circle
+    drawContext.canvas.nativeCanvas.drawText(
+        node.value.toString(),
+        x,
+        y + 10f, // Center the text vertically in the circle
+        android.graphics.Paint().apply {
+            textAlign = android.graphics.Paint.Align.CENTER
+            textSize = 40f // Font size for the node value
+            color = android.graphics.Color.BLACK
+        }
+    )
+
+    // Add a label for the root node only
+    if (node == root) {
+        drawContext.canvas.nativeCanvas.drawText(
+            "Root",
+            x,
+            y - nodeRadius - 10f, // Position above the root node
+            android.graphics.Paint().apply {
+                textAlign = android.graphics.Paint.Align.CENTER
+                textSize = 30f // Font size for the label
+                color = android.graphics.Color.BLACK
+            }
+        )
+    }
+
+    // Recursively draw the left and right children
+    drawTree(
+        node.left,
+        x - horizontalSpacing, // Shift left child horizontally
+        y + verticalSpacing,   // Move down vertically
+        depth + 1,
+        x,
+        y,
+        highlightedNode,
+        root
+    )
+    drawTree(
+        node.right,
+        x + horizontalSpacing, // Shift right child horizontally
+        y + verticalSpacing,   // Move down vertically
+        depth + 1,
+        x,
+        y,
+        highlightedNode,
+        root
+    )
+}

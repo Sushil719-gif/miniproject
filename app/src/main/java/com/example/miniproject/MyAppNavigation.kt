@@ -61,5 +61,47 @@ fun MyAppNavigation(modifier: Modifier =Modifier,authViewModel: AuthViewModel){
         composable("Array"){
             ArrayVisualizer(navController)
         }
+        composable("BST"){
+            BinarySearchTreeVisualizer(navController)
+        }
+        composable("IPS"){
+            InterpolationSearchVisualizer(navController)
+        }
+        composable("DFS"){
+            DFSGraphTraversal(navController)
+        }
+        composable("BFS"){
+            BFSGraphTraversal(navController)
+        }
+        composable("TopoSort"){
+            TopologicalSortVisualization(navController)
+        }
+        composable("Prims"){
+            PrimsAlgorithmVisualization(navController)
+        }
+        composable("Kruskal"){
+            KruskalsAlgorithmVisualization(navController)
+        }
+        composable("Dijkstra"){
+            DijkstraAlgorithmVisualization(navController)
+        }
+        composable("Gbfs"){
+            GBFSGraphTraversal(navController)
+        }
+        composable("Ucs"){
+            UCSGraphTraversal(navController)
+        }
+        composable("Astar"){
+            AStarGraphTraversal(navController)
+        }
+        composable("Idastar"){
+            IDAStarGraphTraversal(navController)
+        }
+        composable("avl"){
+            AVLTreeBuilder(navController)
+        }
+        composable("Heap"){
+            HeapVisualizer(navController)
+        }
     })
 }
