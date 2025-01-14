@@ -1,7 +1,9 @@
 package com.example.miniproject
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -111,8 +113,21 @@ fun MyAppNavigation(modifier: Modifier =Modifier,authViewModel: AuthViewModel){
             HeapVisualizer(navController)
         }
 
-        composable("geminiiii"){
-            ChatScreen()
+        composable("Chat") {
+            ChatScreen(
+                navController = navController,
+                modifier = Modifier.fillMaxSize(),
+                viewModel = viewModel() // Use viewModel() if not using Hilt
+            )
         }
+
+        composable("Problem") {
+            AlgorithmRecommendationScreen(
+                navController = navController,
+                modifier = Modifier.fillMaxSize(),
+                viewModel = viewModel() // Use viewModel() if not using Hilt
+            )
+        }
+
     })
 }

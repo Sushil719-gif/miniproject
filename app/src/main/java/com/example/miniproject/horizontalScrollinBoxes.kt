@@ -69,7 +69,7 @@ fun HorizontalScrollingBoxes(navController: NavController,authViewModel: AuthVie
                     contentAlignment = Alignment.Center
                 ) {
                     // Text with Typewriter Effect
-                    val text = "Visualize Data structures and algorithms, master concepts, and elevate your coding expertise!"
+                    val text = "Visualize data structures and algorithms, master the concepts, and elevate your coding expertise."
                     var displayedText by remember { mutableStateOf("") }
 
                     // Launching the typewriter effect animation continuously
@@ -135,7 +135,7 @@ fun HorizontalScrollingBoxes(navController: NavController,authViewModel: AuthVie
                     contentAlignment = Alignment.Center
                 ) {
                     // Text with Typewriter Effect
-                    val text = "Paste your code, uncover complexity, and gain insights for performance and optimization!"
+                    val text = "Write your code, analyze time and space complexity, and gain insights for performance and optimization."
                     var displayedText by remember { mutableStateOf("") }
 
                     // Launching the typewriter effect animation continuously
@@ -170,7 +170,7 @@ fun HorizontalScrollingBoxes(navController: NavController,authViewModel: AuthVie
                     // Button for navigation
                     Button(
                         onClick = {
-                            navController.navigate("model1")
+                            navController.navigate("Chat")
                         },
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
@@ -200,7 +200,7 @@ fun HorizontalScrollingBoxes(navController: NavController,authViewModel: AuthVie
                     contentAlignment = Alignment.Center
                 ) {
                     // Text with Typewriter Effect
-                    val text = "Paste your problem statement to get the best algorithm recommendations for efficient solutions!"
+                    val text = "Paste your problem statement to receive the best algorithm recommendations, approaches, and efficient solutions."
                     var displayedText by remember { mutableStateOf("") }
 
                     // Launching the typewriter effect animation continuously
@@ -235,7 +235,7 @@ fun HorizontalScrollingBoxes(navController: NavController,authViewModel: AuthVie
                     // Button for navigation
                     Button(
                         onClick = {
-                            navController.navigate("model2")
+                            navController.navigate("Problem")
                         },
                         modifier = Modifier
                             .align(Alignment.BottomCenter)

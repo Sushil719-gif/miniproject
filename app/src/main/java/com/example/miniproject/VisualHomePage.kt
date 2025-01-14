@@ -43,6 +43,7 @@ fun VisualHomePage(navController: NavController) {
     val scrollingState4 = rememberScrollState()
     val scrollingState5 = rememberScrollState()
     val scrollingState6 = rememberScrollState()
+    val scrollingState7 = rememberScrollState()
 
     // Get the screen width
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -518,7 +519,7 @@ fun VisualHomePage(navController: NavController) {
             Spacer(modifier = Modifier.height(15.dp))
 
             Text("AI&ML Algorithms", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            Row(modifier = Modifier.horizontalScroll(scrollingState2).padding(top = 5.dp)) {
+            Row(modifier = Modifier.horizontalScroll(scrollingState7).padding(top = 5.dp)) {
                 Box(
                     modifier = Modifier
                         .size(boxWidth)

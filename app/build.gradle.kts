@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
-
+//    id("com.google.gms.google-services")
 }
 
 android {
@@ -60,6 +60,21 @@ android {
 dependencies {
     dependencies {
         dependencies {
+            val composeVersion = "1.5.0" // Latest stable Compose version
+            val material3Version = "1.2.0" // Latest stable Material3 version
+            implementation("androidx.compose.ui:ui:$composeVersion")
+            implementation("androidx.compose.material3:material3:$material3Version")
+            implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+            debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+            implementation("androidx.compose.foundation:foundation:$composeVersion")
+            implementation("androidx.compose.runtime:runtime:$composeVersion")
+            implementation("androidx.compose.animation:animation:$composeVersion")
+            implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+            implementation("com.google.firebase:firebase-analytics")
+            implementation ("com.google.ai.client.generativeai:generativeai:0.1.1")
+            implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+            implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+            implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
             implementation ("com.squareup.retrofit2:retrofit:2.9.0")
             implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
             implementation ("com.squareup.okhttp3:okhttp:4.9.1")
