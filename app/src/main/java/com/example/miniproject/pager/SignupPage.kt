@@ -50,7 +50,179 @@ import androidx.navigation.NavController
 import com.example.miniproject.AuthState
 import com.example.miniproject.AuthViewModel
 
+
+
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@Composable
+fun SignupPage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    authViewModel: AuthViewModel
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf(false) } // Track password error
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val authState = authViewModel.authState.observeAsState()
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.Authenticated -> navController.navigate("home")
+            is AuthState.Error -> Toast.makeText(
+                context,
+                (authState.value as AuthState.Error).message,
+                Toast.LENGTH_SHORT
+            ).show()
+            else -> Unit
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFF0A59C4), Color(0xFF9C27B0)) // Purple gradient background
+                )
+            )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Title
+            Text(
+                "Create Account",
+                fontSize = 28.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Email Input Field
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                placeholder = { Text("Email", color = Color.White.copy(alpha = 0.7F)) },
+                leadingIcon = {
+                    Icon(Icons.Default.Email, contentDescription = "Email Icon", tint = Color.White)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp)),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.White.copy(alpha = 0.7F),
+                    cursorColor = Color.White
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Password Input Field
+            OutlinedTextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                    passwordError = !isValidPassword(password) // Check validity on input change
+                },
+                placeholder = { Text("Password", color = Color.White.copy(alpha = 0.7F)) },
+                leadingIcon = {
+                    Icon(Icons.Default.Lock, contentDescription = "Password Icon", tint = Color.White)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp)),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = if (passwordError) Color.Red else Color.White,
+                    unfocusedBorderColor = Color.White.copy(alpha = 0.7F),
+                    cursorColor = Color.White
+                ),
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        if (isValidPassword(password)) {
+                            authViewModel.signup(email, password)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Password must contain at least one uppercase letter, one digit, and one special symbol.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                ),
+                isError = passwordError
+            )
+
+            if (passwordError) {
+                Text(
+                    text = "Password (min length 8) must contain at least one uppercase letter, one digit, and one special symbol.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Signup Button
+            Button(
+                onClick = {
+                    if (isValidPassword(password)) {
+                        authViewModel.signup(email, password)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Password (min length 8) must contain at least one uppercase letter, one digit, and one special symbol.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A1B9A))
+            ) {
+                Text("Sign Up", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Navigate to Login
+            TextButton(onClick = { navController.navigate("login") }) {
+                Text(
+                    text = "Already have an account? Sign In",
+                    color = Color.White.copy(alpha = 0.7F),
+                    fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
+
+// Validation Function
+fun isValidPassword(password: String): Boolean {
+    val passwordRegex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%^&*]).{8,}$".toRegex()
+    return password.matches(passwordRegex)
+}
+
+
+/*@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SignupPage(
     modifier: Modifier = Modifier,
@@ -179,4 +351,4 @@ fun SignupPage(
             }
         }
     }
-}
+}*/

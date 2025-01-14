@@ -271,6 +271,47 @@ fun VisualHomePage(navController: NavController) {
                         Text("Start")
                     }
                 }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Merge Sort",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("MergeSort")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(boxWidth)
+                        .padding(4.dp)
+                        .background(Color.DarkGray)
+                ) {
+                    Text(
+                        text = "Quick Sort",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    Button(onClick = {navController.navigate("QuickSort")},
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                            .wrapContentSize()
+                            .size(width = 80.dp, height = 35.dp) // Set a fixed size
+                            .padding(bottom = 4.dp)){
+                        Text("Start")
+                    }
+                }
+
             }
 
             Spacer(modifier = Modifier.height(15.dp))

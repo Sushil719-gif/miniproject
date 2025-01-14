@@ -3,12 +3,16 @@ package com.example.miniproject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel(){
     private val auth: FirebaseAuth =FirebaseAuth.getInstance()
     private val _authState= MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
+
+
  init{
      checkAuthStatus()
  }
@@ -58,6 +62,26 @@ class AuthViewModel : ViewModel(){
     fun signout(){
         auth.signOut()
         _authState.value=AuthState.Unauthenticated
+    }
+
+
+    fun resetPassword(email: String) {
+        // Add logic to send a password reset email
+        viewModelScope.launch {
+            try {
+                // Simulate sending a password reset email
+                // Replace this with actual authentication logic (e.g., Firebase)
+                if (email.isNotEmpty()) {
+                    // Example: FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    println("Password reset email sent to $email") // Replace with real action
+                } else {
+                    throw IllegalArgumentException("Email cannot be empty")
+                }
+            } catch (e: Exception) {
+                // Handle errors
+                println("Error resetting password: ${e.message}")
+            }
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.miniproject
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -16,15 +17,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /*@OptIn(ExperimentalMaterial3Api::class)
@@ -1004,5 +1011,496 @@ suspend fun selectionSort(
 }
 
 
-//
+//Merge Sort.....
 
+
+@Composable
+fun MergeSortVisualization(navController: NavController) {
+    val inputArray = remember { mutableStateOf("4,2,6,0") }
+    val steps = remember { mutableStateListOf<Triple<List<Int>, Int, String>>() }
+    val currentStepIndex = remember { mutableStateOf(0) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        // This Box keeps the IconButton fixed at the top
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.TopStart) // Make sure it's aligned at the top left
+                .zIndex(1f) // Keep the button on top of other elements
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back"
+            )
+        }
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp).clickable { dismissKeyboard() },
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Spacer(modifier=Modifier.height(50.dp))
+            // Input array text field
+            TextField(
+                value = inputArray.value,
+                onValueChange = { inputArray.value = it },
+                label = { Text("Enter Array (comma-separated)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // Buttons for controlling the steps
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(onClick = {
+                    dismissKeyboard()
+                    val array = inputArray.value.split(",").mapNotNull { it.trim().toIntOrNull() }
+                    steps.clear()
+                    performMergeSort(array, steps)
+                    currentStepIndex.value = 0
+                }) {
+                    Text("Start Sorting")
+                }
+
+                Button(
+                    onClick = {
+                        dismissKeyboard()
+                        currentStepIndex.value = (currentStepIndex.value - 1).coerceAtLeast(0)
+                    },
+                    enabled = currentStepIndex.value > 0
+                ) {
+                    Text("Previous Step")
+                }
+
+                Button(
+                    onClick = {
+                        dismissKeyboard()
+                        currentStepIndex.value =
+                            (currentStepIndex.value + 1).coerceAtMost(steps.size - 1)
+                    },
+                    enabled = currentStepIndex.value < steps.size - 1
+                ) {
+                    Text("Next Step")
+                }
+            }
+
+            // Display message outside canvas
+            val message = steps.getOrNull(currentStepIndex.value)?.third ?: "Starting Merge Sort"
+            Text(
+                text = message,
+                style = MaterialTheme.typography.headlineSmall
+                ,
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            )
+
+            // Canvas to draw the tree
+            Box(modifier = Modifier.fillMaxSize().weight(1f).padding(top = 16.dp)) {
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    drawMergeSortTreeWithSteps(steps, currentStepIndex.value)
+                }
+            }
+        }
+    }
+}
+fun performMergeSort(array: List<Int>, steps: MutableList<Triple<List<Int>, Int, String>>) {
+    fun mergeSort(arr: List<Int>, level: Int) {
+        if (arr.size == 1) {
+            // Add single-element array at level 2
+            steps.add(Triple(arr, 2, "Level 2: Single element ${arr.joinToString()}"))
+            return
+        }
+
+        val mid = arr.size / 2
+        val left = arr.subList(0, mid)
+        val right = arr.subList(mid, arr.size)
+
+        // Add division step at level 1 (only the divided parts, no parent array)
+        if (level == 1) {
+            steps.add(Triple(left, level, "\nLevel $level: Dividing into two parts: ${left.joinToString()}"))
+            steps.add(Triple(right, level, "\nLevel $level: Dividing into two parts: ${right.joinToString()}"))
+        }
+
+        // Recursively divide further
+        mergeSort(left, level + 1)
+        mergeSort(right, level + 1)
+
+        // Merge step
+        val merged = mutableListOf<Int>()
+        var i = 0
+        var j = 0
+        while (i < left.size && j < right.size) {
+            if (left[i] <= right[j]) {
+                merged.add(left[i])
+                i++
+            } else {
+                merged.add(right[j])
+                j++
+            }
+        }
+        while (i < left.size) merged.add(left[i++])
+        while (j < right.size) merged.add(right[j++])
+
+        // Add merged arrays step at level 3 or beyond
+        if (level >= 2) {
+            steps.add(Triple(merged, level + 1, "\nLevel ${level + 1}: Merged parts -> ${left.joinToString()} + ${right.joinToString()} => ${merged.joinToString()}"))
+        }
+    }
+
+    // Clear steps to ensure no duplicates
+    steps.clear()
+
+    // Add the initial array step at Level 0
+    steps.add(Triple(array, 0, "Level 0: Initial array: ${array.joinToString()}"))
+
+    // Start the merge sort process
+    mergeSort(array, 1)
+
+    // Add the final sorted array
+    steps.add(Triple(array.sorted(), steps.maxOf { it.second } + 1, "\nLevel ${steps.maxOf { it.second } + 1}: Final sorted array: ${array.sorted().joinToString()}"))
+}
+
+
+fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMergeSortTreeWithSteps(
+    steps: List<Triple<List<Int>, Int, String>>,
+    currentStepIndex: Int
+) {
+    if (steps.isEmpty()) return
+
+    // Draw light color background for the entire canvas
+    drawRect(
+        color = Color(0xFFD3F9D8), // Light green background
+        size = size
+    )
+
+    // Get the current step data
+    val step = steps[currentStepIndex]
+
+    // Calculate vertical spacing based on the max level
+    val maxLevel = steps.maxOf { it.second }
+    val verticalSpacing = size.height / (maxLevel + 2)
+
+    // Group nodes by level
+    val levels = steps.groupBy { it.second }
+
+    // Draw all nodes up to the current level
+    for (level in 0..step.second) {
+        levels[level]?.let { nodes ->
+            val horizontalSpacing = size.width / (nodes.size + 1)
+            val centerY = (level + 1) * verticalSpacing // Shift levels down
+
+            nodes.forEachIndexed { index, node ->
+                val centerX = (index + 1) * horizontalSpacing
+                val array = node.first
+
+                array.forEachIndexed { arrayIndex, value ->
+                    val rectWidth = size.width / 20
+                    val rectHeight = size.height / 15
+                    val offsetX = centerX - (array.size / 2f - arrayIndex) * (rectWidth + 10)
+
+                    drawRect(
+                        color = Color.Blue,
+                        topLeft = Offset(offsetX - rectWidth / 2, centerY - rectHeight / 2),
+                        size = Size(rectWidth, rectHeight)
+                    )
+
+                    drawContext.canvas.nativeCanvas.drawText(
+                        value.toString(),
+                        offsetX,
+                        centerY + rectHeight / 4,
+                        android.graphics.Paint().apply {
+                            textSize = rectHeight * 0.5f
+                            color = android.graphics.Color.WHITE
+                            textAlign = android.graphics.Paint.Align.CENTER
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+//QuickSort..........
+
+
+
+@Composable
+fun QuickSortVisualization(navController: NavController) {
+    var inputText by remember { mutableStateOf("") }
+    var numbers by remember { mutableStateOf(listOf<Int>()) }
+    var steps by remember { mutableStateOf(listOf<Pair<String, List<Int>>>()) }
+    var currentStepIndex by remember { mutableStateOf(0) }
+    var pivotIndex by remember { mutableStateOf(-1) }
+    var comparedIndex by remember { mutableStateOf(-1) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+// Dismiss keyboard when tapping outside any input field or button
+    val dismissKeyboard: () -> Unit = {
+        keyboardController?.hide()
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        // This Box keeps the IconButton fixed at the top
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.TopStart) // Make sure it's aligned at the top left
+                .zIndex(1f) // Keep the button on top of other elements
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back"
+            )
+        }
+        Column(
+            modifier = Modifier
+                .clickable { dismissKeyboard() }
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier=Modifier.height(50.dp))
+            // Input Section
+            TextField(
+                value = inputText,
+                onValueChange = { inputText = it },
+                label = { Text("Enter numbers (comma separated)") },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(0.8f)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = {
+                dismissKeyboard()
+                numbers = inputText.split(",").mapNotNull { it.trim().toIntOrNull() }
+            }) {
+                Text("Set Numbers")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    dismissKeyboard()
+                    val stepList = mutableListOf<Pair<String, List<Int>>>()
+                    CoroutineScope(Dispatchers.Default).launch {
+                        quickSortWithSteps(numbers.toMutableList(), 0, numbers.size - 1, stepList)
+                        withContext(Dispatchers.Main) {
+                            steps = stepList
+                            currentStepIndex = 0
+                            updateIndexes(
+                                steps,
+                                currentStepIndex,
+                                updateNumbers = { updatedNumbers -> numbers = updatedNumbers },
+                                updateHighlightIndexes = ::updateHighlightIndexes,
+                                setPivotIndex = { pivotIndex = it },
+                                setComparedIndex = { comparedIndex = it }
+                            )
+                        }
+                    }
+                },
+                enabled = numbers.isNotEmpty()
+            ) {
+                Text("Start Sorting")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Canvas for visualization
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(Color(0xFFE8F5E9))
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(numbers.size) { index ->
+                        val isPivot = index == pivotIndex
+                        val isCompared = index == comparedIndex
+
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .background(
+                                    color = when {
+                                        isPivot -> Color.Red
+                                        isCompared -> Color.Blue
+                                        else -> Color.Gray
+                                    },
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = numbers[index].toString(),
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Step Message
+            Text(
+                text = "Step ${currentStepIndex + 1}/${steps.size}: ${
+                    steps.getOrNull(
+                        currentStepIndex
+                    )?.first ?: "No steps yet."
+                }",
+                style = MaterialTheme.typography.bodyMedium
+
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Navigation Buttons
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Button(
+                    onClick = {
+                        if (currentStepIndex > 0) {
+                            currentStepIndex--
+                            updateIndexes(
+                                steps,
+                                currentStepIndex,
+                                updateNumbers = { updatedNumbers -> numbers = updatedNumbers },
+                                updateHighlightIndexes = ::updateHighlightIndexes,
+                                setPivotIndex = { pivotIndex = it },
+                                setComparedIndex = { comparedIndex = it }
+                            )
+                        }
+                    },
+                    enabled = currentStepIndex > 0
+                ) {
+                    Text("Previous")
+                }
+
+                Button(
+                    onClick = {
+                        if (currentStepIndex < steps.size - 1) {
+                            currentStepIndex++
+                            updateIndexes(
+                                steps,
+                                currentStepIndex,
+                                updateNumbers = { updatedNumbers -> numbers = updatedNumbers },
+                                updateHighlightIndexes = ::updateHighlightIndexes,
+                                setPivotIndex = { pivotIndex = it },
+                                setComparedIndex = { comparedIndex = it }
+                            )
+                        }
+                    },
+                    enabled = currentStepIndex < steps.size - 1
+                ) {
+                    Text("Next")
+                }
+            }
+        }
+    }
+}
+fun updateIndexes(
+    steps: List<Pair<String, List<Int>>>,
+    currentStepIndex: Int,
+    updateNumbers: (List<Int>) -> Unit,
+    updateHighlightIndexes: (String, List<Int>, (Int) -> Unit, (Int) -> Unit) -> Unit,
+    setPivotIndex: (Int) -> Unit,
+    setComparedIndex: (Int) -> Unit
+) {
+    val step = steps.getOrNull(currentStepIndex)
+    if (step != null) {
+        updateNumbers(step.second)
+        updateHighlightIndexes(step.first, step.second, setPivotIndex, setComparedIndex)
+    }
+}
+
+fun updateHighlightIndexes(
+    stepMessage: String,
+    array: List<Int>,
+    setPivotIndex: (Int) -> Unit,
+    setComparedIndex: (Int) -> Unit
+) {
+    val pivotPattern = "Pivot chosen: (\\d+) \\(index (\\d+)\\)".toRegex()
+    val comparePattern = "Comparing (\\d+) with pivot (\\d+)".toRegex()
+
+    var localPivotIndex = -1
+    var localComparedIndex = -1
+
+    val pivotMatch = pivotPattern.find(stepMessage)
+    if (pivotMatch != null) {
+        localPivotIndex = pivotMatch.groupValues[2].toInt()
+    }
+
+    val compareMatch = comparePattern.find(stepMessage)
+    if (compareMatch != null) {
+        localComparedIndex = array.indexOf(compareMatch.groupValues[1].toInt())
+    }
+
+    setPivotIndex(localPivotIndex)
+    setComparedIndex(localComparedIndex)
+}
+
+suspend fun quickSortWithSteps(
+    arr: MutableList<Int>,
+    low: Int,
+    high: Int,
+    steps: MutableList<Pair<String, List<Int>>>
+) {
+    if (low < high) {
+        val pi = partitionWithSteps(arr, low, high, steps)
+        quickSortWithSteps(arr, low, pi - 1, steps)
+        quickSortWithSteps(arr, pi + 1, high, steps)
+    }
+}
+
+fun partitionWithSteps(
+    arr: MutableList<Int>,
+    low: Int,
+    high: Int,
+    steps: MutableList<Pair<String, List<Int>>>
+): Int {
+    val pivot = arr[high]
+    var i = low - 1
+
+    steps.add("Pivot chosen: $pivot (index $high). Starting partition." to arr.toList())
+
+    for (j in low until high) {
+        steps.add("Comparing ${arr[j]} with pivot $pivot." to arr.toList())
+
+        if (arr[j] < pivot) {
+            i++
+            arr.swap(i, j)
+            steps.add("Swapped ${arr[i]} and ${arr[j]}: $arr" to arr.toList())
+        } else {
+            steps.add("${arr[j]} >= pivot. No swap needed." to arr.toList())
+        }
+    }
+
+    arr.swap(i + 1, high)
+    steps.add("Placed pivot $pivot at position ${i + 1}: $arr" to arr.toList())
+
+    return i + 1
+}
+
+fun MutableList<Int>.swap(i: Int, j: Int) {
+    val temp = this[i]
+    this[i] = this[j]
+    this[j] = temp
+}

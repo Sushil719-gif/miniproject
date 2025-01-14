@@ -22,6 +22,7 @@ fun MyAppNavigation(modifier: Modifier =Modifier,authViewModel: AuthViewModel){
         composable("Home"){
             HomePage(modifier,navController,authViewModel)
         }
+
         composable("visualize"){
             VisualHomePage(navController)
         }
@@ -39,6 +40,12 @@ fun MyAppNavigation(modifier: Modifier =Modifier,authViewModel: AuthViewModel){
         }
         composable("SelectionSort"){
             SelectionSort(navController)
+        }
+        composable("MergeSort"){
+            MergeSortVisualization(navController)
+        }
+        composable("QuickSort"){
+           QuickSortVisualization(navController)
         }
         composable("LinearSearch"){
             LinearSearchVisualizer(navController)
@@ -102,6 +109,10 @@ fun MyAppNavigation(modifier: Modifier =Modifier,authViewModel: AuthViewModel){
         }
         composable("Heap"){
             HeapVisualizer(navController)
+        }
+
+        composable("geminiiii"){
+            ChatScreen()
         }
     })
 }
